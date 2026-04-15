@@ -1,0 +1,127 @@
+#:kivy 2.0
+
+<WaveformWidget>:
+    canvas:
+        Color:
+            rgba: 0.1, 0.1, 0.15, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+        
+        # 网格线
+        Color:
+            rgba: 0.2, 0.2, 0.25, 1
+        Line:
+            points: [self.pos[0], self.pos[1] + self.height/4, self.pos[0] + self.width, self.pos[1] + self.height/4]
+            width: 1
+        Line:
+            points: [self.pos[0], self.pos[1] + self.height/2, self.pos[0] + self.width, self.pos[1] + self.height/2]
+            width: 1
+        Line:
+            points: [self.pos[0], self.pos[1] + self.height*3/4, self.pos[0] + self.width, self.pos[1] + self.height*3/4]
+            width: 1
+
+<HeartRateApp>:
+    orientation: 'vertical'
+    padding: 10
+    spacing: 10
+    
+    # 标题
+    Label:
+        text: '[b]心率监测系统[/b]'
+        markup: True
+        font_size: '24sp'
+        size_hint_y: 0.08
+        color: 0.9, 0.9, 0.9, 1
+    
+    # 连接状态
+    Label:
+        id: status_label
+        text: '状态: 未连接'
+        font_size: '14sp'
+        size_hint_y: 0.05
+        color: 0.7, 0.7, 0.7, 1
+    
+    # 心率显示区域
+    BoxLayout:
+        orientation: 'vertical'
+        size_hint_y: 0.25
+        spacing: 5
+        canvas:
+            Color:
+                rgba: 0.15, 0.15, 0.2, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        
+        Label:
+            id: hr_label
+            text: '--'
+            font_size: '72sp'
+            bold: True
+            color: 0.9, 0.2, 0.4, 1
+        
+        Label:
+            text: 'BPM'
+            font_size: '16sp'
+            color: 0.7, 0.7, 0.7, 1
+    
+    # 血氧显示
+    BoxLayout:
+        orientation: 'horizontal'
+        size_hint_y: 0.12
+        spacing: 10
+        
+        Label:
+            text: '血氧饱和度:'
+            font_size: '16sp'
+            color: 0.7, 0.7, 0.7, 1
+        
+        Label:
+            id: spo2_value
+            text: '-- %'
+            font_size: '24sp'
+            bold: True
+            color: 0.3, 0.8, 0.9, 1
+    
+    # 波形图
+    WaveformWidget:
+        id: waveform
+        size_hint_y: 0.3
+    
+    # 报警状态
+    Label:
+        id: alarm_label
+        text: '[size=18]状态正常[/size]'
+        markup: True
+        font_size: '16sp'
+        size_hint_y: 0.08
+        color: 0.3, 0.9, 0.5, 1
+    
+    # 控制按钮
+    BoxLayout:
+        orientation: 'horizontal'
+        size_hint_y: 0.1
+        spacing: 10
+        
+        Button:
+            id: connect_btn
+            text: '连接设备'
+            font_size: '16sp'
+            background_color: 0.2, 0.6, 0.9, 1
+            on_press: app.toggle_connection(self)
+        
+        ToggleButton:
+            id: monitor_btn
+            text: '开始监测'
+            font_size: '16sp'
+            background_color: 0.3, 0.8, 0.4, 1
+            on_press: app.toggle_monitoring(self)
+    
+    # 清除缓存按钮
+    Button:
+        text: '清除历史数据'
+        font_size: '14sp'
+        size_hint_y: 0.07
+        background_color: 0.8, 0.3, 0.3, 1
+        on_press: app.clear_cache(self)
